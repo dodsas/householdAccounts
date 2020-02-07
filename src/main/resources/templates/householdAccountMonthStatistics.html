@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="shortcut icon" href="#" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" class="material-icons"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="shortcut icon" class="fa fa-area-chart">-->
+
+<!--<link rel="icon" type="image/png" href="http://example.com/myicon.png"/>-->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>김뿌니네</title>
+</head>
+<body>
+<div class="container">
+    <!-- Content here -->
+    <div th:replace="fragments/menu_main"> </div>
+    <div th:replace="fragments/menu_sub"> </div>
+
+    <!-- 년도 선택 -->
+    <!--<a th:each="year : ${yearList}" th:href="${callbackUrl}+'?year='+${year}" th:id="'month_year_' + ${year}" class="badge badge-secondary" th:text="${year}" style="margin-right: 5px"></a>-->
+    <a th:each="year : ${yearList}" th:href="'javascript:monthHref('+${year}+',null)'" th:id="'monthly_year_' + ${year}" class="badge badge-secondary" th:text="${year}" style="margin-right: 5px"></a>
+
+    <!-- 월 선택 -->
+    <div>
+    <a th:each="month : ${allMonth}" th:href="'javascript:monthHref(null,'+${month}+')'" th:id="'monthly_month_'+${month}"class="badge badge-secondary" th:text="${month}" style="margin-right: 5px"></a>
+    </div>
+
+    <!-- 년도 / 월 관련 자바 스크립트 -->
+    <script th:inline="javascript">
+        document.getElementById("monthly_year_" + [[${selectedYear}]]).className = "badge badge-primary"
+        document.getElementById("monthly_month_" + [[${selectedMonth}]]).className = "badge badge-success"
+        function monthHref(year, month){
+            var callbackUrl = [[${callbackUrlOnlyPath}]] + "?";
+            year = year == null ? [[${selectedYear}]] : year;
+            month = month == null ? [[${selectedMonth}]] : month;
+            if(month != null){
+                callbackUrl += "month=" + month + "&";
+            }
+            if(year != null){
+                callbackUrl += "year=" + year + "&";
+            }
+            window.location = callbackUrl;
+        }
+    </script>
+
+
+    <table class="table" style="margin-top: 10px">
+        <thead>
+        <tr>
+            <th scope="col">분류</th>
+            <!--<th style="text-align:right" scope="col">금액</th>-->
+            <th scope="col">금액</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="data : ${dataList}">
+            <th scope="row" th:text="${data.getMerchantType()}"></th>
+            <!--<th style="text-align:right" scope="row" th:text="${{data.getS()}}"></th>-->
+            <th scope="row" th:text="${{data.getS()}}"></th>
+        </tr>
+        </tbody>
+    </table>
+
+    <hr class="my-4">
+
+    <!--<div th:replace="fragments/pagination"></div>-->
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+
+<form method="POST" th:action="${callbackUrl}" name="paginationForm" xmlns:th="http://www.thymeleaf.org">
+    <!--<input type="hidden" name="year" th:value="${currentYear}" />-->
+    <input type="hidden" name="currentPage" />
+    <input type="hidden" name="moveIndicator" />
+    <input type="hidden" name="startPage" th:value="${householdInfo.startPage()}" />
+    <input type="hidden" name="lastPage" th:value="${householdInfo.lastPage()}" />
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination" >
+
+            <!-- << -->
+            <li th:class="${'page-item '} + ${householdInfo.isHasPrevPage() ? '' : 'disabled'}">
+                <input type="submit" class="page-link" th:onclick="'pagination(-1, \'Prev\')'" th:value="${'PREV'}" />
+            </li>
+
+           <!--/*@thymesVar id="pageInfo" type="org.ysnam.householdAccounts.web.pagination.PageInfo"*/-->
+            <li th:each="pageInfo : ${householdInfo.getPageList()}" th:class="${'page-item'}+${pageInfo.getActiveMode()}">
+                <input type="submit" class="page-link" th:onclick="'pagination('+${pageInfo.getNumber()}+', \'None\')'" th:value="${pageInfo.getNumber() + 1}" />
+            </li>
+
+            <li th:class="${'page-item '} + ${householdInfo.isHasNextPage() ? '' : 'disabled'}">
+                <input type="submit" class="page-link" th:onclick="'pagination(-1, \'Next\')'" th:value="${'NEXT'}" />
+            </li>
+
+        </ul>
+    </nav>
+</form>
+
+<script th:inline="javascript">
+    function pagination(currentPage, moveIndicator) {
+        document.forms["paginationForm"]["currentPage"].value = currentPage;
+        document.forms["paginationForm"]["moveIndicator"].value = moveIndicator;
+    }
+</script>
